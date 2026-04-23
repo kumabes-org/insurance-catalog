@@ -29,19 +29,26 @@ jobs:
     
     runs-on: ubuntu-latest
     steps:
-      - name: package application
-        run: echo "Packaging application..."
+      - uses: actions/checkout@v6.0.2
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: "insurance-catalog"
+          path: "./app/target"
+
+      - name: Display structure of downloaded files
+        run: |
+          pwd
+          ls -R      
 
   inspection:
     needs: [lint, ci-java-maven]
     runs-on: ubuntu-latest
     steps:
-      - name: inspection code
-        run: echo "Running code inspection..."
+      - uses: actions/checkout@v6.0.2
 
   publish:
     needs: [package, inspection]
     runs-on: ubuntu-latest
     steps:
-      - name: publish application
-        run: echo "Publishing to repository..."
+      - uses: actions/checkout@v6.0.2
