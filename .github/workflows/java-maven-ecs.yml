@@ -1,0 +1,40 @@
+name: "Java Maven ECS"
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: lint code
+        run: echo "Running code linting..."
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build application
+        run: echo "Building application..."
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test application
+        run: echo "Running tests..."
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: package application
+        run: echo "Packaging application..."
+
+  inspection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: inspection code
+        run: echo "Running code inspection..."
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: publish application
+        run: echo "Publishing to repository..."
