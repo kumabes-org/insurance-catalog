@@ -104,6 +104,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'docker.io/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+        env:
+          IMAGE_NAME: "insurance-catalog"
+          VERSION_ARG: "latest"
+          ORGANIZATION: "rotoku"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
