@@ -6,23 +6,26 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: lint code
-        run: echo "Running code linting..."
+      - uses: actions/checkout@v6.0.2
+      - uses: hadolint/hadolint-action@v3.3.0
+        with:
+          dockerfile: app/Dockerfile
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: build application
-        run: echo "Building application..."
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: test application
-        run: echo "Running tests..."
+  ci-java-maven:
+    uses: kumabes-org/reusable-workflows-ci-java-maven/.github/workflows/ci.yml@main
+    with:
+      runs-on: "ubuntu-latest"
+      environment: "production"
+      working-directory: "app"
+      shell: "bash"
+      project-name: "insurance-catalog"
+      java-distribution: "zulu"
+      java-version: "21"
+      maven-version: "3.9.6"
+    secrets: inherit
 
   package:
-    needs: [lint, build, test]
+    needs: [lint, ci-java-maven]
     
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +33,7 @@ jobs:
         run: echo "Packaging application..."
 
   inspection:
-    needs: [lint, build, test]
+    needs: [lint, ci-java-maven]
     runs-on: ubuntu-latest
     steps:
       - name: inspection code
