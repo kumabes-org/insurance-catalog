@@ -49,8 +49,18 @@ jobs:
         env:
           IMAGE_NAME: "insurance-catalog"
           VERSION_ARG: "latest"
-          IMAGE_TAR: "insurance-catalog.tar"  
+          IMAGE_TAR: "insurance-catalog.tar"
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.IMAGE_NAME }}-package"
+          retention-days: 1
+          path: |
+            ${{ github.workspace }}/app/${{ env.IMAGE_TAR }}
+        env:
+          IMAGE_NAME: "insurance-catalog"
+          VERSION_ARG: "latest"
+          IMAGE_TAR: "insurance-catalog.tar"
   inspection:
     needs: [lint, ci-java-maven]
     runs-on: ubuntu-latest
@@ -61,4 +71,21 @@ jobs:
     needs: [package, inspection]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: "insurance-catalog-package"
+          path: "./app"
+      - name: Prepare for publishing
+        run: |        
+          pwd
+          ls -lrth --color
+          cd app
+          pwd
+          ls -lrth --color
+          docker image ls
+          docker load -i ${IMAGE_TAR}
+          docker image ls          
+        env:
+          IMAGE_NAME: "insurance-catalog"
+          VERSION_ARG: "latest"
+          IMAGE_TAR: "insurance-catalog.tar"          
