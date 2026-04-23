@@ -39,7 +39,16 @@ jobs:
       - name: Display structure of downloaded files
         run: |
           pwd
-          ls -R      
+          ls -R
+          cd app
+          pwd
+          docker build . -t "${IMAGE_NAME}:${VERSION_ARG}"
+          docker image ls
+          docker save -o ${IMAGE_TAR} "${IMAGE_NAME}${VERSION_ARG}"
+        env:
+          IMAGE_NAME: "insurance-catalog"
+          VERSION_ARG: "latest"
+          IMAGE_TAR: "insurance-catalog.tar"  
 
   inspection:
     needs: [lint, ci-java-maven]
