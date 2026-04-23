@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /workspace
 
-COPY mvnw pom.xml settings.xml ./
+COPY mvnw pom.xml settings.xml sonar-project.properties ./
 COPY .mvn .mvn
 RUN chmod +x mvnw
 
