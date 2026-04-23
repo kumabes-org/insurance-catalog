@@ -63,14 +63,22 @@ jobs:
           IMAGE_TAR: "insurance-catalog.tar"
   inspection:
     needs: [lint, ci-java-maven]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6.0.2
+    uses: kumabes-org/reusable-workflows-codeql/.github/workflows/main.yml@main
+    with:
+      runs-on: "ubuntu-latest"
+      environment: "production"
+      working-directory: "app"
+      shell: "bash"
+      project-name: "insurance-catalog"
+      languages: "java"
+    secrets: inherit
+
 
   publish:
     needs: [package, inspection]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6.0.2
       - uses: actions/download-artifact@v8.0.1
         with:
           name: "insurance-catalog-package"
@@ -88,4 +96,23 @@ jobs:
         env:
           IMAGE_NAME: "insurance-catalog"
           VERSION_ARG: "latest"
-          IMAGE_TAR: "insurance-catalog.tar"          
+          IMAGE_TAR: "insurance-catalog.tar"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app
+          push: true
+          tags: |            
+            ${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_ARG }}
+        env:
+          IMAGE_NAME: "insurance-catalog"
+          VERSION_ARG: "latest"
+          ORGANIZATION: "rotoku"
