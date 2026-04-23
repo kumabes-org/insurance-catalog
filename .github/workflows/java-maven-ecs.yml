@@ -44,7 +44,8 @@ jobs:
           pwd
           docker build . -t "${IMAGE_NAME}:${VERSION_ARG}"
           docker image ls
-          docker save -o ${IMAGE_TAR} "${IMAGE_NAME}${VERSION_ARG}"
+          docker save -o ${IMAGE_TAR} "${IMAGE_NAME}:${VERSION_ARG}"
+          ls -lrth --color
         env:
           IMAGE_NAME: "insurance-catalog"
           VERSION_ARG: "latest"
