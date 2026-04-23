@@ -22,18 +22,22 @@ jobs:
         run: echo "Running tests..."
 
   package:
+    needs: [lint, build, test]
+    
     runs-on: ubuntu-latest
     steps:
       - name: package application
         run: echo "Packaging application..."
 
   inspection:
+    needs: [lint, build, test]
     runs-on: ubuntu-latest
     steps:
       - name: inspection code
         run: echo "Running code inspection..."
 
   publish:
+    needs: [package, inspection]
     runs-on: ubuntu-latest
     steps:
       - name: publish application
