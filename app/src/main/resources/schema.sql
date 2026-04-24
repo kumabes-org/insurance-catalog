@@ -1,0 +1,10 @@
+CREATE TABLE catalogs(
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    active BOOLEAN NOT NULL
+);
+
+CREATE TABLE offers(
+    id VARCHAR(255) PRIMARY KEY
+);
