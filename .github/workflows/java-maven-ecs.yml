@@ -51,7 +51,7 @@ jobs:
           VERSION_ARG: "latest"
           IMAGE_TAR: "insurance-catalog.tar"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: "${{ env.IMAGE_NAME }}-package"
           retention-days: 1
