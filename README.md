@@ -26,3 +26,10 @@ Se logs não forem necessários, desabilite somente a exportação de logs:
 ```bash
 export OTEL_LOGS_EXPORTER=none
 ```
+
+```bash
+cd app
+git update-index --chmod=+x mvnw
+git update-index --chmod=+x gradlew
+cd ../
+```
